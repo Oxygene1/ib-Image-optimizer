@@ -7,7 +7,7 @@ const App: React.FC = () => {
     <div style={{ padding: "20px", maxWidth: "800px", margin: "0 auto" }}>
       <h1>Image Optimizer Examples</h1>
 
-      <h2>Square Image</h2>
+      <h2>Square Image with Loading State</h2>
       <ImageOptimizer
         src="https://picsum.photos/400"
         aspectRatio="square"
@@ -16,7 +16,7 @@ const App: React.FC = () => {
         alt="Random square image"
       />
 
-      <h2>Portrait Image</h2>
+      <h2>Portrait Image with Loading State</h2>
       <ImageOptimizer
         src="https://picsum.photos/300/400"
         aspectRatio="portrait"
@@ -34,6 +34,16 @@ const App: React.FC = () => {
         height={300}
         alt="Random landscape image with fallback"
         onError={(error) => console.log("Image error:", error)}
+      />
+
+      <h2>Image without Loading State</h2>
+      <ImageOptimizer
+        src="https://picsum.photos/400/400"
+        aspectRatio="square"
+        width={400}
+        height={400}
+        alt="Image without loading state"
+        showSkeleton={false}
       />
     </div>
   );
