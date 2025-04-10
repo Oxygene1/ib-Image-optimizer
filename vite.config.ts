@@ -6,9 +6,9 @@ export default defineConfig({
   plugins: [react()],
   build: {
     lib: {
-      entry: resolve(__dirname, "src/index.ts"),
+      entry: resolve(__dirname, "src/index.tsx"), 
       name: "ib-Image-optimizer",
-      fileName: (format) => `ib-Image-optimizer.${format}.js`,
+      fileName: (format) => `ib-image-optimizer.${format}.js`, 
     },
     rollupOptions: {
       external: ["react", "react-dom"],
@@ -19,5 +19,7 @@ export default defineConfig({
         },
       },
     },
+    target: "esnext", 
+    sourcemap: true, 
   },
 });

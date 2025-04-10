@@ -13,25 +13,44 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "prepare": "npm run build"
   },
+  "keywords": [
+    "react",
+    "image",
+    "optimizer",
+    "component",
+    "typescript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Oxygene1/ib-Image-optimizer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Oxygene1/ib-Image-optimizer/issues"
+  },
+  "homepage": "https://github.com/Oxygene1/ib-Image-optimizer#readme",
   "dependencies": {
-    "@radix-ui/react-slot": "^1.2.0",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "lucide-react": "^0.487.0",
+    "@radix-ui/react-slot": "^1.0.2",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.0",
+    "lucide-react": "^0.331.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "tailwind-merge": "^3.2.0"
+    "tailwind-merge": "^2.2.1"
   },
   "devDependencies": {
+    "@types/node": "^22.14.0",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
     "@vitejs/plugin-react": "^4.2.1",
-    "autoprefixer": "^10.4.21",
-    "postcss": "^8.5.3",
-    "tailwindcss": "^4.1.3",
-    "typescript": "^5.3.3",
+    "autoprefixer": "^10.4.17",
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.8.3",
     "vite": "^5.0.12"
   },
   "peerDependencies": {
