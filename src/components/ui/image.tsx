@@ -1,6 +1,7 @@
 import * as React from "react";
 import { cn } from "../../lib/utils";
 
+
 export interface ImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   aspectRatio?: "square" | "portrait" | "landscape" | "auto";
   width?: number;

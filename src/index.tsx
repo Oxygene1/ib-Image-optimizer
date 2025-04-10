@@ -1,6 +1,7 @@
 import React from "react";
-import { Image, type ImageProps } from "./components/ui/image.tsx";
-import { cn } from "./lib/utils.ts";
+import { Image, type ImageProps } from "./components/ui/image";
+import { cn } from "./lib/utils";
+
 
 export interface ImageOptimizerProps
   extends Omit<ImageProps, "src" | "onError"> {
