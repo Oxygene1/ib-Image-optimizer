@@ -40,4 +40,4 @@ function App() {
 
 ## License
 
-MIT 
+Ibrahim Abdulganiyu
