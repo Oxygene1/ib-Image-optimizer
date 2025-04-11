@@ -3,6 +3,8 @@ import { Image, type ImageProps } from "./components/ui/image";
 import { Skeleton } from "./components/ui/skeleton";
 import { cn } from "./lib/utils";
 
+// This is not nneeded anymore since it now inside the the use-react folder
+
 export interface ImageOptimizerProps
   extends Omit<ImageProps, "src" | "onError"> {
   src: string;
