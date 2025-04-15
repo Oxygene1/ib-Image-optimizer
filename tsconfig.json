@@ -23,7 +23,7 @@
     "types": ["@testing-library/jest-dom"],
     "typeRoots": [
       "node_modules/@types",
-      "src/types",
+      "src/test/types.d.ts",
       "node_modules/@testing-library/jest-dom/types"
     ]
   },
