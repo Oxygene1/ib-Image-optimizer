@@ -40,7 +40,7 @@ class MockImage {
     if (event === "error") this.onerror = callback as any;
   }
 
-  removeEventListener(event: string, callback: () => void) {
+  removeEventListener(event: string) {
     if (event === "load") this.onload = null;
     if (event === "error") this.onerror = null;
   }
