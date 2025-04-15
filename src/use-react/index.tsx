@@ -1,4 +1,3 @@
-// react/FunctionalImageOptimizer.tsx
 import { useEffect, useState, useRef } from "react";
 import {
   createImageOptimizer,
