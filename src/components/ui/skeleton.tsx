@@ -17,6 +17,7 @@ const Skeleton = React.forwardRef<HTMLDivElement, SkeletonProps>(
     return (
       <div
         ref={ref}
+        data-testid="skeleton"
         className={cn(
           "animate-pulse rounded-lg bg-gray-200 dark:bg-gray-700",
           aspectRatioClass[aspectRatio],

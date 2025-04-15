@@ -1,5 +1,13 @@
 import "@testing-library/jest-dom";
+import type { Assertion, AsymmetricMatchersContaining } from "vitest";
 
+declare global {
+  namespace Vi {
+    interface Assertion<T = any> extends Assertion<T> {}
+    interface AsymmetricMatchersContaining
+      extends AsymmetricMatchersContaining {}
+  }
+}
 declare global {
   namespace Vi {
     interface Assertion<T = any> {

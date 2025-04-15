@@ -2,8 +2,7 @@ import "@testing-library/jest-dom";
 import { expect, afterEach, vi } from "vitest";
 import { cleanup } from "@testing-library/react";
 import * as matchers from "@testing-library/jest-dom/matchers";
-import "./types";
-
+import "./types"
 expect.extend(matchers);
 
 // Mock IntersectionObserver
@@ -40,7 +39,7 @@ class MockImage {
     if (event === "error") this.onerror = callback as any;
   }
 
-  removeEventListener(event: string, callback: () => void) {
+  removeEventListener(event: string) {
     if (event === "load") this.onload = null;
     if (event === "error") this.onerror = null;
   }

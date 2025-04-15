@@ -1,53 +1,104 @@
 import React from "react";
-import { createRoot } from "react-dom/client";
+import ReactDOM from "react-dom/client";
 import { ImageOptimizer } from "../src";
+import "./styles.css";
 
-const App: React.FC = () => {
+const App = () => {
   return (
-    <div style={{ padding: "20px", maxWidth: "800px", margin: "0 auto" }}>
-      <h1>Image Optimizer Examples</h1>
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 p-8">
+      <div className="max-w-4xl mx-auto space-y-8">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
+          Image Optimizer Examples
+        </h1>
 
-      <h2>Square Image with Loading State</h2>
-      <ImageOptimizer
-        src="https://picsum.photos/400"
-        aspectRatio="square"
-        width={400}
-        height={400}
-        alt="Random square image"
-      />
+        {/* Square Image with Loading State */}
+        <div className="space-y-4">
+          <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
+            Square Image with Loading State
+          </h2>
+          <div className="w-64 h-64">
+            <ImageOptimizer
+              src="https://picsum.photos/400/400"
+              alt="Square image"
+              aspectRatio="square"
+              className="rounded-lg shadow-lg"
+              showSkeleton={true}
+            />
+          </div>
+        </div>
 
-      <h2>Portrait Image with Loading State</h2>
-      <ImageOptimizer
-        src="https://picsum.photos/300/400"
-        aspectRatio="portrait"
-        width={300}
-        height={400}
-        alt="Random portrait image"
-      />
+        {/* Portrait Image with Loading State */}
+        <div className="space-y-4">
+          <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
+            Portrait Image with Loading State
+          </h2>
+          <div className="w-64 h-96">
+            <ImageOptimizer
+              src="https://picsum.photos/400/600"
+              alt="Portrait image"
+              aspectRatio="portrait"
+              className="rounded-lg shadow-lg"
+              showSkeleton={true}
+            />
+          </div>
+        </div>
 
-      <h2>Landscape Image with Fallback</h2>
-      <ImageOptimizer
-        src="https://invalid-url.com/image.jpg"
-        fallbackSrc="https://picsum.photos/400/300"
-        aspectRatio="landscape"
-        width={400}
-        height={300}
-        alt="Random landscape image with fallback"
-        onError={(error) => console.log("Image error:", error)}
-      />
+        {/* Landscape Image with Loading State */}
+        <div className="space-y-4">
+          <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
+            Landscape Image with Loading State
+          </h2>
+          <div className="w-96 h-64">
+            <ImageOptimizer
+              src="https://picsum.photos/600/400"
+              alt="Landscape image"
+              aspectRatio="landscape"
+              className="rounded-lg shadow-lg"
+              showSkeleton={true}
+            />
+          </div>
+        </div>
 
-      <h2>Image without Loading State</h2>
-      <ImageOptimizer
-        src="https://picsum.photos/400/400"
-        aspectRatio="square"
-        width={400}
-        height={400}
-        alt="Image without loading state"
-        showSkeleton={false}
-      />
+        {/* Image with Fallback and Error Handler */}
+        <div className="space-y-4">
+          <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
+            Image with Fallback and Error Handler
+          </h2>
+          <div className="w-64 h-64">
+            <ImageOptimizer
+              src="https://invalid-url.com/image.jpg"
+              fallbackSrc="https://picsum.photos/400/400"
+              alt="Image with fallback"
+              aspectRatio="square"
+              className="rounded-lg shadow-lg"
+              showSkeleton={true}
+              onError={(error) => console.error("Image failed to load:", error)}
+            />
+          </div>
+        </div>
+
+        {/* Image without Loading State */}
+        <div className="space-y-4">
+          <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
+            Image without Loading State
+          </h2>
+          <div className="w-64 h-64">
+            <ImageOptimizer
+              src="https://picsum.photos/400/400"
+              alt="Image without loading state"
+              aspectRatio="square"
+              className="rounded-lg shadow-lg"
+              showSkeleton={false}
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
 
-const root = createRoot(document.getElementById("root")!);
-root.render(<App />);
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);

@@ -23,60 +23,59 @@ export interface ImageOptimizer {
   updateOptions: (newOptions: Partial<ImageOptimizerOptions>) => void;
 }
 
-
 /**
  * createImageOptimizer core functionality to be used in framewroks
  *
  */
-export function createImageOptimizer(options: ImageOptimizerOptions): ImageOptimizer {
+export function createImageOptimizer(
+  options: ImageOptimizerOptions
+): ImageOptimizer {
   let currentOptions: ImageOptimizerOptions = { ...options };
   let state: ImageOptimizerState = {
     currentSrc: options.src,
     isLoading: true,
-    hasError: false
+    hasError: false,
   };
 
   // I am thinking we should use Set here instead of an array, but it depends on the amount of subscribers on the image. If it is small, array is sufficient, if not, Set might be the future option.
   let subscribers: ImageOptimizerSubscriber[] = [];
 
   function notifySubscribers(): void {
-    subscribers.forEach(subscriber => subscriber(state));
+    subscribers.forEach((subscriber) => subscriber(state));
   }
-
   function setState(newState: Partial<ImageOptimizerState>): void {
     state = { ...state, ...newState };
     notifySubscribers();
   }
-
   return {
     getState: () => ({ ...state }),
     subscribe: (listener: ImageOptimizerSubscriber) => {
       subscribers.push(listener);
       // Immediately notify with current state
       listener(state);
-
       // Return unsubscribe function
       return () => {
-        subscribers = subscribers.filter(sub => sub !== listener);
+        subscribers = subscribers.filter((sub) => sub !== listener);
       };
     },
     handleError: () => {
       setState({ hasError: true });
 
-      if (currentOptions.fallbackSrc && state.currentSrc !== currentOptions.fallbackSrc) {
+      if (
+        currentOptions.fallbackSrc &&
+        state.currentSrc !== currentOptions.fallbackSrc
+      ) {
         setState({
           currentSrc: currentOptions.fallbackSrc,
-          isLoading: true
+          isLoading: true,
         });
       }
-
       if (currentOptions.onError) {
         currentOptions.onError(new Error("Failed to load image"));
       }
     },
     handleLoad: () => {
       setState({ isLoading: false });
-
       if (currentOptions.onLoad) {
         currentOptions.onLoad();
       }
@@ -85,19 +84,18 @@ export function createImageOptimizer(options: ImageOptimizerOptions): ImageOptim
       setState({
         currentSrc: newSrc,
         isLoading: true,
-        hasError: false
+        hasError: false,
       });
 
       currentOptions = {
         ...currentOptions,
-        src: newSrc
+        src: newSrc,
       };
     },
-
     updateOptions: (newOptions: Partial<ImageOptimizerOptions>) => {
       currentOptions = {
         ...currentOptions,
-        ...newOptions
+        ...newOptions,
       };
 
       // If source changed, reset state
@@ -105,19 +103,21 @@ export function createImageOptimizer(options: ImageOptimizerOptions): ImageOptim
         setState({
           currentSrc: newOptions.src,
           isLoading: true,
-          hasError: false
+          hasError: false,
         });
       }
-    }
-  }
+    },
+  };
 }
 
 /**
  * Custom hook/composable function for frameworks that support effects and state
  */
-export function useImageOptimizer(options: ImageOptimizerOptions,
+export function useImageOptimizer(
+  options: ImageOptimizerOptions,
   setState: (state: ImageOptimizerState) => void,
-  cleanup: (fn: () => void) => void) {
+  cleanup: (fn: () => void) => void
+) {
   const optimizer = createImageOptimizer(options);
   const unsubscribe = optimizer.subscribe(setState);
 
@@ -134,8 +134,9 @@ export function initImageOptimizer(
   options: ImageOptimizerOptions,
   onStateChange: (state: ImageOptimizerState) => void,
   registerCleanup: (cleanup: () => void) => void
-): Omit<ImageOptimizer, 'subscribe' | 'getState'> {
-  const { subscribe, handleError, handleLoad, reset, updateOptions } = createImageOptimizer(options);
+): Omit<ImageOptimizer, "subscribe" | "getState"> {
+  const { subscribe, handleError, handleLoad, reset, updateOptions } =
+    createImageOptimizer(options);
 
   const unsubscribe = subscribe(onStateChange);
 
@@ -145,7 +146,7 @@ export function initImageOptimizer(
     handleError,
     handleLoad,
     reset,
-    updateOptions
+    updateOptions,
   };
 }
 

@@ -6,7 +6,6 @@
     "module": "ESNext",
     "skipLibCheck": true,
     "moduleResolution": "bundler",
-    // "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": false,
@@ -20,8 +19,29 @@
     "outDir": "dist",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "types": ["@testing-library/jest-dom"],
+    // Add typeRoots to include custom declaration files
+    "typeRoots": [
+      "node_modules/@types",
+      "src/test",
+      "node_modules/@testing-library/jest-dom/types"
+    ]
   },
-  "include": ["src"],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.d.ts",
+    "src/**/*.js",
+    "src/**/*.jsx",
+    "src/test/**/*",
+    "src/test/**/*.d.ts"
+  ],
+  // Add exclude to avoid unnecessary compilation
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.spec.ts" // Exclude test files if needed
+  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
