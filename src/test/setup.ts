@@ -2,7 +2,8 @@ import "@testing-library/jest-dom";
 import { expect, afterEach, vi } from "vitest";
 import { cleanup } from "@testing-library/react";
 import * as matchers from "@testing-library/jest-dom/matchers";
-import "./types"
+import "./types";
+
 expect.extend(matchers);
 
 // Mock IntersectionObserver
@@ -22,7 +23,7 @@ Object.defineProperty(window, "IntersectionObserver", {
 class MockImage {
   onload: (() => void) | null = null;
   onerror: ((e: ErrorEvent) => void) | null = null;
-  src: string = "";
+  src = "";
 
   constructor() {
     setTimeout(() => {
@@ -39,7 +40,7 @@ class MockImage {
     if (event === "error") this.onerror = callback as any;
   }
 
-  removeEventListener(event: string) {
+  removeEventListener(event: string, callback: () => void) {
     if (event === "load") this.onload = null;
     if (event === "error") this.onerror = null;
   }

@@ -21,10 +21,9 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "types": ["@testing-library/jest-dom"],
-    // Add typeRoots to include custom declaration files
     "typeRoots": [
       "node_modules/@types",
-      "src/test",
+      "src/types",
       "node_modules/@testing-library/jest-dom/types"
     ]
   },
@@ -34,14 +33,9 @@
     "src/**/*.d.ts",
     "src/**/*.js",
     "src/**/*.jsx",
-    "src/test/**/*",
-    "src/test/**/*.d.ts"
+    "src/__tests__/**/*.ts",
+    "src/__tests__/**/*.tsx"
   ],
-  // Add exclude to avoid unnecessary compilation
-  "exclude": [
-    "node_modules",
-    "dist",
-    "**/*.spec.ts" // Exclude test files if needed
-  ],
+  "exclude": ["node_modules", "dist"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom";
 import { render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { ImageOptimizer } from "../index";
+import ImageOptimizer from "../use-react";
 
 class MockImage {
   onload: (() => void) | null = null;
@@ -18,9 +18,9 @@ class MockImage {
     }, 0);
   }
 
-  addEventListener(event: string, callback: () => void) {
-    if (event === "load") this.onload = callback;
-    if (event === "error") this.onerror = callback as any;
+  addEventListener(event: string, callback: EventListener) {
+    if (event === "load") this.onload = callback as () => void;
+    if (event === "error") this.onerror = callback as (e: ErrorEvent) => void;
   }
 
   removeEventListener(event: string) {
@@ -29,14 +29,13 @@ class MockImage {
   }
 }
 
-(global as any).Image = MockImage;
-
 describe("ImageOptimizer", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    (global as any).Image = MockImage;
   });
 
-  it("renders with skeleton when loading", () => {
+  it("renders with skeleton when loading", async () => {
     render(
       <ImageOptimizer
         src="https://example.com/image.jpg"
@@ -47,7 +46,14 @@ describe("ImageOptimizer", () => {
     );
 
     expect(screen.getByRole("img")).toBeInTheDocument();
+    expect(screen.getByRole("img")).toHaveAttribute("alt", "Test image");
     expect(screen.getByTestId("skeleton")).toBeInTheDocument();
+    expect(screen.getByRole("img")).toHaveStyle({ opacity: "0" });
+
+    await waitFor(() => {
+      expect(screen.queryByTestId("skeleton")).not.toBeInTheDocument();
+      expect(screen.getByRole("img")).toHaveStyle({ opacity: "1" });
+    });
   });
 
   it("handles image load successfully", async () => {
@@ -62,6 +68,10 @@ describe("ImageOptimizer", () => {
 
     await waitFor(() => {
       expect(screen.getByRole("img")).toHaveStyle({ opacity: "1" });
+      expect(screen.getByRole("img")).toHaveAttribute(
+        "src",
+        "https://example.com/image.jpg"
+      );
     });
   });
 
@@ -82,7 +92,8 @@ describe("ImageOptimizer", () => {
 
     await waitFor(() => {
       expect(screen.getByRole("img")).toHaveAttribute("src", fallbackSrc);
-      expect(onError).toHaveBeenCalled();
+      expect(screen.getByRole("img")).toHaveStyle({ opacity: "1" });
+      expect(onError).toHaveBeenCalledWith(expect.any(ErrorEvent));
     });
   });
 
@@ -112,6 +123,7 @@ describe("ImageOptimizer", () => {
     );
 
     expect(screen.queryByTestId("skeleton")).not.toBeInTheDocument();
+    expect(screen.getByRole("img")).toBeInTheDocument();
   });
 
   it("handles missing src prop", () => {
@@ -119,11 +131,11 @@ describe("ImageOptimizer", () => {
 
     render(
       <ImageOptimizer
-        src="https://example.com/image.jpg"
         alt="Test image"
-        showSkeleton={false}
         width={400}
         height={300}
+        onError={onError}
+        src="https://example.com/image.jpg"
       />
     );
 
@@ -142,5 +154,19 @@ describe("ImageOptimizer", () => {
     );
 
     expect(container.firstChild).toHaveClass("custom-class");
+  });
+
+  it("handles missing width and height props", async () => {
+    render(
+      <ImageOptimizer
+        src="https://example.com/image.jpg"
+        alt="Test image"
+      />
+    );
+
+    expect(screen.getByRole("img")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByRole("img")).toHaveStyle({ opacity: "1" });
+    });
   });
 });
