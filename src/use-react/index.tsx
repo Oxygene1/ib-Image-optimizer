@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState, useRef } from "react";
 import {
   createImageOptimizer,
@@ -18,7 +20,7 @@ export interface ImageOptimizerProps
   showSkeleton?: boolean;
 }
 
-export const ImageOptimizer = ({
+const ClientImageOptimizer = ({
   src,
   fallbackSrc,
   onError,
@@ -97,7 +99,7 @@ export const ImageOptimizer = ({
       )}
       <Image
         src={currentSrc}
-        style={{ opacity: isLoading ? 0 : 1 }} // Use inline style for testing
+        style={{ opacity: isLoading ? 0 : 1 }}
         className="transition-opacity duration-300"
         onError={() => {
           if (optimizerRef.current) {
@@ -129,5 +131,9 @@ export const ImageOptimizer = ({
   );
 };
 
+// Export the client component
+export const ImageOptimizer = ClientImageOptimizer;
+
+// Export types
 export { Image, type ImageProps };
 export default ImageOptimizer;
