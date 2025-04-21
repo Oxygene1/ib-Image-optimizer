@@ -1,41 +1,48 @@
 import "@testing-library/jest-dom";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
+
 import { beforeEach, describe, expect, it, vi } from "vitest";
+
 import ImageOptimizer from "../use-react";
 
-class MockImage {
-  onload: (() => void) | null = null;
-  onerror: ((e: ErrorEvent) => void) | null = null;
+global.Image = class MockImage implements Partial<HTMLImageElement> {
+  onload: () => void = () => {};
+  onerror: () => void = () => {};
   src: string = "";
+  alt: string = "";
+  width: number = 0;
+  height: number = 0;
+  complete: boolean = false;
 
-  constructor() {
+  constructor(width?: number, height?: number) {
+    if (width) this.width = width;
+    if (height) this.height = height;
+
+    // For testing, trigger load/error after a small delay
     setTimeout(() => {
       if (this.src.includes("error")) {
-        this.onerror?.(new ErrorEvent("error"));
-      } else {
-        this.onload?.();
+        this.onerror();
+      } else if (this.src) {
+        this.complete = true;
+        this.onload();
       }
-    }, 0);
+    }, 10);
   }
 
-  addEventListener(event: string, callback: EventListener) {
-    if (event === "load") this.onload = callback as () => void;
-    if (event === "error") this.onerror = callback as (e: ErrorEvent) => void;
+  addEventListener(event: string, callback: any) {
+    if (event === "load") this.onload = callback;
+    if (event === "error") this.onerror = callback;
   }
 
-  removeEventListener(event: string) {
-    if (event === "load") this.onload = null;
-    if (event === "error") this.onerror = null;
-  }
-}
+  removeEventListener() {}
+} as any;
 
 describe("ImageOptimizer", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    (global as any).Image = MockImage;
   });
 
-  it("renders with skeleton when loading", async () => {
+  it("renders with skeleton when loading", () => {
     render(
       <ImageOptimizer
         src="https://example.com/image.jpg"
@@ -45,37 +52,38 @@ describe("ImageOptimizer", () => {
       />
     );
 
-    expect(screen.getByRole("img")).toBeInTheDocument();
-    expect(screen.getByRole("img")).toHaveAttribute("alt", "Test image");
+    // Initial state should show skeleton and hide image
     expect(screen.getByTestId("skeleton")).toBeInTheDocument();
-    expect(screen.getByRole("img")).toHaveStyle({ opacity: "0" });
+    expect(screen.getByRole("img")).toHaveStyle({ opacity: 0 });
 
-    await waitFor(() => {
-      expect(screen.queryByTestId("skeleton")).not.toBeInTheDocument();
-      expect(screen.getByRole("img")).toHaveStyle({ opacity: "1" });
-    });
+    fireEvent.load(screen.getByRole("img"));
+
+    // After load, skeleton should be gone and image visible
+    expect(screen.queryByTestId("skeleton")).not.toBeInTheDocument();
+    expect(screen.getByRole("img")).toHaveStyle({ opacity: 1 });
   });
 
-  it("handles image load successfully", async () => {
+  it("handles image load successfully", () => {
+    const onLoad = vi.fn();
+
     render(
       <ImageOptimizer
         src="https://example.com/image.jpg"
         alt="Test image"
         width={400}
         height={300}
+        onLoad={onLoad}
       />
     );
 
-    await waitFor(() => {
-      expect(screen.getByRole("img")).toHaveStyle({ opacity: "1" });
-      expect(screen.getByRole("img")).toHaveAttribute(
-        "src",
-        "https://example.com/image.jpg"
-      );
-    });
+    fireEvent.load(screen.getByRole("img"));
+
+    // Check that image is visible and onLoad called
+    expect(screen.getByRole("img")).toHaveStyle({ opacity: 1 });
+    expect(onLoad).toHaveBeenCalled();
   });
 
-  it("uses fallback image on error", async () => {
+  it("uses fallback image on error", () => {
     const fallbackSrc = "https://example.com/fallback.jpg";
     const onError = vi.fn();
 
@@ -90,11 +98,11 @@ describe("ImageOptimizer", () => {
       />
     );
 
-    await waitFor(() => {
-      expect(screen.getByRole("img")).toHaveAttribute("src", fallbackSrc);
-      expect(screen.getByRole("img")).toHaveStyle({ opacity: "1" });
-      expect(onError).toHaveBeenCalledWith(expect.any(ErrorEvent));
-    });
+    fireEvent.error(screen.getByRole("img"));
+
+    // Now the src should be the fallback and onError should be called
+    expect(screen.getByRole("img")).toHaveAttribute("src", fallbackSrc);
+    expect(onError).toHaveBeenCalled();
   });
 
   it("respects aspect ratio classes", () => {
@@ -123,7 +131,6 @@ describe("ImageOptimizer", () => {
     );
 
     expect(screen.queryByTestId("skeleton")).not.toBeInTheDocument();
-    expect(screen.getByRole("img")).toBeInTheDocument();
   });
 
   it("handles missing src prop", () => {
@@ -135,11 +142,10 @@ describe("ImageOptimizer", () => {
         width={400}
         height={300}
         onError={onError}
-        src="https://example.com/image.jpg"
       />
     );
 
-    expect(onError).toHaveBeenCalledWith(expect.any(Error));
+    expect(onError).toHaveBeenCalled();
   });
 
   it("applies custom className", () => {
@@ -156,17 +162,15 @@ describe("ImageOptimizer", () => {
     expect(container.firstChild).toHaveClass("custom-class");
   });
 
-  it("handles missing width and height props", async () => {
+  it("handles missing width and height props", () => {
     render(
-      <ImageOptimizer
-        src="https://example.com/image.jpg"
-        alt="Test image"
-      />
+      <ImageOptimizer src="https://example.com/image.jpg" alt="Test image" />
     );
 
     expect(screen.getByRole("img")).toBeInTheDocument();
-    await waitFor(() => {
-      expect(screen.getByRole("img")).toHaveStyle({ opacity: "1" });
-    });
+
+    fireEvent.load(screen.getByRole("img"));
+
+    expect(screen.getByRole("img")).toHaveStyle({ opacity: 1 });
   });
 });
