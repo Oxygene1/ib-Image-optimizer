@@ -1,16 +1,17 @@
-# IB Image Optimizer
+# Image Optimizer
 
-A sleek and powerful React component for optimizing images with loading states, fallback support, and aspect ratio control.
+A React component for optimizing images with loading states and aspect ratio control.
 
 ## Features
 
-- 🖼️ **Image Optimization**: Efficient image loading with fallback support
-- ⚡ **Loading States**: Beautiful skeleton loading states
-- 📐 **Aspect Ratio Control**: Support for square, portrait, landscape, and auto aspect ratios
-- 🎨 **Styling**: Fully customizable with className and style props
-- 🌙 **Dark Mode Support**: Built-in dark mode compatibility
-- 🛠️ **TypeScript Support**: Fully typed components and props
-- 📱 **Responsive**: Works seamlessly across all device sizes
+- 🖼️ Image optimization with loading states
+- 📐 Aspect ratio control (square, portrait, landscape)
+- 💅 Customizable styling with Tailwind CSS
+- 🌙 Dark mode support
+- 🚀 Smooth fade-in transitions
+- 🛡️ Error handling with fallback images
+- 📱 Responsive design
+- ⚡ TypeScript support
 
 ## Installation
 
@@ -20,8 +21,6 @@ npm install ib-image-optimizer
 
 ## Usage
 
-### Basic Usage
-
 ```tsx
 import { ImageOptimizer } from "ib-image-optimizer";
 
@@ -29,99 +28,68 @@ function App() {
   return (
     <ImageOptimizer
       src="https://example.com/image.jpg"
-      alt="Example image"
-      width={400}
-      height={300}
+      alt="Description"
+      aspectRatio="square"
+      className="rounded-lg shadow-lg"
+      showSkeleton={true}
     />
   );
 }
 ```
 
-### With Loading State
-
-```tsx
-<ImageOptimizer
-  src="https://example.com/image.jpg"
-  aspectRatio="square"
-  width={400}
-  height={400}
-  alt="Square image with loading state"
-/>
-```
-
-### With Fallback Image
-
-```tsx
-<ImageOptimizer
-  src="https://invalid-url.com/image.jpg"
-  fallbackSrc="https://example.com/fallback.jpg"
-  aspectRatio="landscape"
-  width={400}
-  height={300}
-  alt="Image with fallback"
-  onError={(error) => console.log("Image error:", error)}
-/>
-```
-
-### Without Loading State
-
-```tsx
-<ImageOptimizer
-  src="https://example.com/image.jpg"
-  showSkeleton={false}
-  width={400}
-  height={300}
-  alt="Image without loading state"
-/>
-```
-
 ## Props
 
-| Prop           | Type                                            | Default   | Description                                        |
-| -------------- | ----------------------------------------------- | --------- | -------------------------------------------------- |
-| `src`          | string                                          | required  | The source URL of the image                        |
-| `fallbackSrc`  | string                                          | undefined | Fallback image URL if the main image fails to load |
-| `aspectRatio`  | "square" \| "portrait" \| "landscape" \| "auto" | "auto"    | Controls the aspect ratio of the image             |
-| `width`        | number                                          | undefined | Width of the image                                 |
-| `height`       | number                                          | undefined | Height of the image                                |
-| `alt`          | string                                          | required  | Alt text for the image                             |
-| `className`    | string                                          | undefined | Additional CSS classes                             |
-| `style`        | React.CSSProperties                             | undefined | Inline styles                                      |
-| `showSkeleton` | boolean                                         | true      | Whether to show the loading skeleton               |
-| `onError`      | (error: Error) => void                          | undefined | Error handler callback                             |
+| Prop           | Type                                  | Default  | Description                                        |
+| -------------- | ------------------------------------- | -------- | -------------------------------------------------- |
+| `src`          | string                                | -        | The source URL of the image                        |
+| `alt`          | string                                | -        | Alt text for the image                             |
+| `aspectRatio`  | "square" \| "portrait" \| "landscape" | "square" | The aspect ratio of the image                      |
+| `className`    | string                                | -        | Additional CSS classes to apply                    |
+| `style`        | React.CSSProperties                   | -        | Inline styles to apply                             |
+| `showSkeleton` | boolean                               | true     | Whether to show the loading skeleton               |
+| `fallbackSrc`  | string                                | -        | Fallback image URL if the main image fails to load |
+| `onError`      | (error: Error) => void                | -        | Error handler callback                             |
 
 ## Aspect Ratios
 
-The component supports four aspect ratio options:
+The component supports three aspect ratios:
 
 - `square`: 1:1 aspect ratio
 - `portrait`: 3:4 aspect ratio
 - `landscape`: 4:3 aspect ratio
-- `auto`: Natural aspect ratio of the image
 
 ## Styling
 
-The component can be styled using the `className` and `style` props:
+You can customize the appearance using:
+
+1. `className` prop for Tailwind CSS classes
+2. `style` prop for inline styles
+
+Example:
 
 ```tsx
 <ImageOptimizer
-  src="https://example.com/image.jpg"
-  className="custom-class"
-  style={{ border: "1px solid #ccc" }}
-  alt="Styled image"
+  src="image.jpg"
+  alt="Custom styled image"
+  className="rounded-full border-4 border-blue-500"
+  style={{ filter: "grayscale(50%)" }}
 />
 ```
 
 ## Error Handling
 
-The component provides error handling through the `onError` callback and fallback image support:
+The component provides error handling through:
+
+1. `fallbackSrc` prop for a backup image
+2. `onError` callback for error handling
+
+Example:
 
 ```tsx
 <ImageOptimizer
   src="https://invalid-url.com/image.jpg"
-  fallbackSrc="https://example.com/fallback.jpg"
+  fallbackSrc="fallback.jpg"
   onError={(error) => console.error("Image failed to load:", error)}
-  alt="Image with error handling"
 />
 ```
 
@@ -136,10 +104,28 @@ The component provides error handling through the `onError` callback and fallbac
    ```bash
    npm run dev
    ```
-4. Build the package:
+4. Run tests:
    ```bash
-   npm run build
+   npm test
    ```
+5. Preview production build:
+   ```bash
+   npx vite preview --outDir html
+   ```
+
+## Testing
+
+Run the test suite:
+
+```bash
+npm test
+```
+
+Generate coverage report:
+
+```bash
+npm run test:coverage
+```
 
 ## License
 

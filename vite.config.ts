@@ -6,9 +6,10 @@ export default defineConfig({
   plugins: [react()],
   build: {
     lib: {
-      entry: resolve(__dirname, "src/index.tsx"),
-      name: "ib-Image-optimizer",
-      fileName: (format) => `ib-image-optimizer.${format}.js`,
+      entry: resolve(__dirname, "src/index.ts"),
+      name: "ib-image-optimizer",
+      formats: ["es", "umd"],
+      fileName: (format) => `index.${format}.js`,
     },
     rollupOptions: {
       external: ["react", "react-dom"],
@@ -23,6 +24,6 @@ export default defineConfig({
     sourcemap: true,
   },
   resolve: {
-    extensions: [".tsx", ".ts", ".js", ".jsx"],
+    extensions: [".tsx", ".ts", ".js", ".jsx", ".d.ts"],
   },
 });
