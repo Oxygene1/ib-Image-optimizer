@@ -10,14 +10,19 @@ export default defineConfig({
       include: ["src"],
       exclude: ["src/__tests__", "src/**/*.test.ts", "src/**/*.test.tsx"],
       insertTypesEntry: true,
+      rollupTypes: true,
     }),
   ],
   build: {
     lib: {
-      entry: resolve(__dirname, "src/index.ts"),
+      entry: {
+        index: resolve(__dirname, "src/index.ts"),
+        "use-react": resolve(__dirname, "src/use-react/index.tsx"),
+      },
       name: "ib-image-optimizer",
-      formats: ["es", "umd"],
-      fileName: (format) => `index.${format}.js`,
+      formats: ["es", "cjs"],
+      fileName: (format, entryName) =>
+        `${entryName}.${format === "es" ? "mjs" : "js"}`,
     },
     rollupOptions: {
       external: ["react", "react-dom"],
