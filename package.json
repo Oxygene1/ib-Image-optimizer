@@ -13,9 +13,9 @@
       "require": "./dist/index.js"
     },
     "./use-react": {
-      "types": "./dist/use-react/index.d.ts",
-      "import": "./dist/use-react/index.mjs",
-      "require": "./dist/use-react/index.js"
+      "types": "./dist/use-react.d.ts",
+      "import": "./dist/use-react.mjs",
+      "require": "./dist/use-react.js"
     }
   },
   "files": [
