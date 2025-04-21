@@ -1,6 +1,6 @@
 {
   "name": "ib-image-optimizer",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A React component for optimizing images with loading states and aspect ratio control",
   "type": "module",
   "main": "dist/index.js",
@@ -63,6 +63,7 @@
   },
   "dependencies": {
     "clsx": "^2.1.1",
-    "tailwind-merge": "^2.6.0"
+    "tailwind-merge": "^2.6.0",
+    "vite-plugin-dts": "^4.5.3"
   }
 }
