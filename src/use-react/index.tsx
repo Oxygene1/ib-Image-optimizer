@@ -9,9 +9,9 @@ import { cn } from "../lib/utils";
 
 export interface ImageOptimizerProps
   extends Omit<ImageProps, "src" | "onError"> {
-  src: string;
+  src?: string;
   fallbackSrc?: string;
-  onError?: (error: Error) => void;
+  onError?: (error: Error | ErrorEvent) => void;
   onLoad?: () => void;
   className?: string;
   style?: React.CSSProperties;
@@ -30,8 +30,8 @@ export const ImageOptimizer = ({
   ...props
 }: ImageOptimizerProps) => {
   const [state, setState] = useState<ImageOptimizerState>({
-    currentSrc: src,
-    isLoading: true,
+    currentSrc: src || "",
+    isLoading: Boolean(src),
     hasError: false,
   });
 
@@ -40,7 +40,13 @@ export const ImageOptimizer = ({
   );
 
   useEffect(() => {
-    // Create the optimizer if it doesn't exist
+    // Check if src is missing and trigger error if needed
+    if (!src) {
+      if (onError) onError(new Error("Missing src prop"));
+      setState((prev) => ({ ...prev, hasError: true, isLoading: false }));
+      return;
+    }
+
     if (!optimizerRef.current) {
       optimizerRef.current = createImageOptimizer({
         src,
@@ -71,18 +77,51 @@ export const ImageOptimizer = ({
   }
 
   return (
-    <div className={cn("relative", className)} style={style}>
+    <div
+      className={cn(
+        "relative",
+        aspectRatio && typeof aspectRatio === "string"
+          ? `aspect-${aspectRatio}`
+          : "",
+        className
+      )}
+      style={style}
+      data-testid="image-optimizer-container"
+    >
       {showSkeleton && isLoading && (
-        <Skeleton aspectRatio={aspectRatio} className="absolute inset-0" />
+        <Skeleton
+          data-testid="skeleton"
+          aspectRatio={aspectRatio}
+          className="absolute inset-0"
+        />
       )}
       <Image
         src={currentSrc}
-        className={cn(
-          "transition-opacity duration-300",
-          isLoading ? "opacity-0" : "opacity-100"
-        )}
-        onError={() => optimizerRef.current?.handleError()}
-        onLoad={() => optimizerRef.current?.handleLoad()}
+        style={{ opacity: isLoading ? 0 : 1 }} // Use inline style for testing
+        className="transition-opacity duration-300"
+        onError={() => {
+          if (optimizerRef.current) {
+            optimizerRef.current.handleError();
+          } else if (onError) {
+            onError(new Error("Image failed to load"));
+          }
+          if (fallbackSrc) {
+            setState((prev) => ({
+              ...prev,
+              currentSrc: fallbackSrc,
+              isLoading: false,
+              hasError: true,
+            }));
+          }
+        }}
+        onLoad={() => {
+          if (optimizerRef.current) {
+            optimizerRef.current.handleLoad();
+          } else if (onLoad) {
+            onLoad();
+          }
+          setState((prev) => ({ ...prev, isLoading: false }));
+        }}
         aspectRatio={aspectRatio}
         {...props}
       />
