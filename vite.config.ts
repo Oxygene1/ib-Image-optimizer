@@ -2,6 +2,10 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { resolve } from "path";
 import dts from "vite-plugin-dts";
+import { rmSync } from "fs";
+
+// Clean dist directory before build
+rmSync("dist", { recursive: true, force: true });
 
 export default defineConfig({
   plugins: [
@@ -11,6 +15,9 @@ export default defineConfig({
       exclude: ["src/__tests__", "src/**/*.test.ts", "src/**/*.test.tsx"],
       insertTypesEntry: true,
       rollupTypes: true,
+      copyDtsFiles: true,
+      cleanVueFileName: false,
+      staticImport: true,
     }),
   ],
   build: {
