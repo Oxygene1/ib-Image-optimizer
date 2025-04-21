@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, Suspense } from "react";
 import {
   createImageOptimizer,
   type ImageOptimizerState,
@@ -19,6 +19,16 @@ export interface ImageOptimizerProps
   style?: React.CSSProperties;
   showSkeleton?: boolean;
 }
+
+const LoadingFallback = ({
+  aspectRatio = "auto",
+}: {
+  aspectRatio?: "auto" | "square" | "portrait" | "landscape";
+}) => (
+  <div className={cn("relative", aspectRatio && `aspect-${aspectRatio}`)}>
+    <Skeleton aspectRatio={aspectRatio} className="absolute inset-0" />
+  </div>
+);
 
 export const ClientImageOptimizer = ({
   src,
@@ -77,54 +87,56 @@ export const ClientImageOptimizer = ({
   }
 
   return (
-    <div
-      className={cn(
-        "relative",
-        aspectRatio && typeof aspectRatio === "string"
-          ? `aspect-${aspectRatio}`
-          : "",
-        className
-      )}
-      style={style}
-      data-testid="image-optimizer-container"
-    >
-      {showSkeleton && isLoading && (
-        <Skeleton
-          data-testid="skeleton"
+    <Suspense fallback={<LoadingFallback aspectRatio={aspectRatio} />}>
+      <div
+        className={cn(
+          "relative",
+          aspectRatio && typeof aspectRatio === "string"
+            ? `aspect-${aspectRatio}`
+            : "",
+          className
+        )}
+        style={style}
+        data-testid="image-optimizer-container"
+      >
+        {showSkeleton && isLoading && (
+          <Skeleton
+            data-testid="skeleton"
+            aspectRatio={aspectRatio}
+            className="absolute inset-0"
+          />
+        )}
+        <Image
+          src={currentSrc}
+          style={{ opacity: isLoading ? 0 : 1 }}
+          className="transition-opacity duration-300"
+          onError={() => {
+            if (optimizerRef.current) {
+              optimizerRef.current.handleError();
+            } else if (onError) {
+              onError(new Error("Image failed to load"));
+            }
+            if (fallbackSrc) {
+              setState((prev) => ({
+                ...prev,
+                currentSrc: fallbackSrc,
+                isLoading: false,
+                hasError: true,
+              }));
+            }
+          }}
+          onLoad={() => {
+            if (optimizerRef.current) {
+              optimizerRef.current.handleLoad();
+            } else if (onLoad) {
+              onLoad();
+            }
+            setState((prev) => ({ ...prev, isLoading: false }));
+          }}
           aspectRatio={aspectRatio}
-          className="absolute inset-0"
+          {...props}
         />
-      )}
-      <Image
-        src={currentSrc}
-        style={{ opacity: isLoading ? 0 : 1 }}
-        className="transition-opacity duration-300"
-        onError={() => {
-          if (optimizerRef.current) {
-            optimizerRef.current.handleError();
-          } else if (onError) {
-            onError(new Error("Image failed to load"));
-          }
-          if (fallbackSrc) {
-            setState((prev) => ({
-              ...prev,
-              currentSrc: fallbackSrc,
-              isLoading: false,
-              hasError: true,
-            }));
-          }
-        }}
-        onLoad={() => {
-          if (optimizerRef.current) {
-            optimizerRef.current.handleLoad();
-          } else if (onLoad) {
-            onLoad();
-          }
-          setState((prev) => ({ ...prev, isLoading: false }));
-        }}
-        aspectRatio={aspectRatio}
-        {...props}
-      />
-    </div>
+      </div>
+    </Suspense>
   );
 };

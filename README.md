@@ -1,18 +1,14 @@
-# Image Optimizer
+# IB Image Optimizer
 
-A React component for optimizing images with loading states and aspect ratio control.
+A React component for optimizing images with loading states and error handling.
 
 ## Features
 
-- 🖼️ Image optimization with loading states
-- 📐 Flexible aspect ratio control (auto, square, portrait, landscape)
-- 💅 Customizable styling with Tailwind CSS
-- 🌙 Dark mode support
-- 🚀 Smooth fade-in transitions
-- 🛡️ Error handling with fallback images
-- 📱 Responsive design
-- ⚡ TypeScript support
-- 🧪 Test coverage with Jest and React Testing Library
+- Image loading states with skeleton placeholders
+- Error handling with fallback images
+- Aspect ratio control
+- Next.js server component support
+- TypeScript support
 
 ## Installation
 
@@ -25,119 +21,58 @@ npm install ib-image-optimizer
 ### Basic Usage
 
 ```tsx
-import { ImageOptimizer } from "ib-image-optimizer";
+import { ImageOptimizer } from "ib-image-optimizer/use-react";
 
 function App() {
   return (
     <ImageOptimizer
       src="https://example.com/image.jpg"
-      alt="Description"
-      aspectRatio="auto"
-      className="rounded-lg shadow-lg"
-      showSkeleton={true}
       fallbackSrc="https://example.com/fallback.jpg"
-      onError={(error) => console.error(error)}
+      aspectRatio="square"
       onLoad={() => console.log("Image loaded")}
+      onError={(error) => console.error("Image failed to load:", error)}
     />
   );
 }
 ```
 
+### Next.js Integration
+
+The component is designed to work seamlessly with Next.js server components:
+
+```tsx
+// app/page.tsx
+import { ImageOptimizer } from "ib-image-optimizer/use-react";
+
+export default function Page() {
+  return (
+    <ImageOptimizer
+      src="/images/hero.jpg"
+      fallbackSrc="/images/fallback.jpg"
+      aspectRatio="landscape"
+    />
+  );
+}
+```
 
 ## Props
 
-| Prop           | Type                                            | Default | Description                                        |
-| -------------- | ----------------------------------------------- | ------- | -------------------------------------------------- |
-| `src`          | string                                          | -       | The source URL of the image                        |
-| `alt`          | string                                          | -       | Alt text for the image                             |
-| `aspectRatio`  | "auto" \| "square" \| "portrait" \| "landscape" | "auto"  | The aspect ratio of the image                      |
-| `className`    | string                                          | -       | Additional CSS classes to apply                    |
-| `style`        | React.CSSProperties                             | -       | Inline styles to apply                             |
-| `showSkeleton` | boolean                                         | true    | Whether to show the loading skeleton               |
-| `fallbackSrc`  | string                                          | -       | Fallback image URL if the main image fails to load |
-| `onError`      | (error: Error \| ErrorEvent) => void            | -       | Error handler callback                             |
-| `onLoad`       | () => void                                      | -       | Load handler callback                              |
+| Prop           | Type                                            | Description                                                   |
+| -------------- | ----------------------------------------------- | ------------------------------------------------------------- |
+| `src`          | string                                          | The source URL of the image                                   |
+| `fallbackSrc`  | string                                          | Fallback image URL to display if the main image fails to load |
+| `aspectRatio`  | "auto" \| "square" \| "portrait" \| "landscape" | Controls the aspect ratio of the image container              |
+| `onLoad`       | () => void                                      | Callback fired when the image loads successfully              |
+| `onError`      | (error: Error \| ErrorEvent) => void            | Callback fired when the image fails to load                   |
+| `className`    | string                                          | Additional CSS classes to apply to the container              |
+| `style`        | React.CSSProperties                             | Inline styles to apply to the container                       |
+| `showSkeleton` | boolean                                         | Whether to show a skeleton loading state (default: true)      |
 
-## Aspect Ratios
+## Requirements
 
-The component supports multiple aspect ratios:
-
-- `auto`: Natural aspect ratio of the image
-- `square`: 1:1 aspect ratio
-- `portrait`: 3:4 aspect ratio
-- `landscape`: 4:3 aspect ratio
-
-## Styling
-
-You can customize the appearance using:
-
-1. `className` prop for Tailwind CSS classes
-2. `style` prop for inline styles
-
-Example:
-
-```tsx
-<ImageOptimizer
-  src="image.jpg"
-  alt="Custom styled image"
-  className="rounded-full border-4 border-blue-500"
-  style={{ filter: "grayscale(50%)" }}
-/>
-```
-
-## Error Handling
-
-The component provides robust error handling:
-
-1. `fallbackSrc` prop for a backup image
-2. `onError` callback for error handling
-3. Automatic fallback to null if no fallback image is provided
-
-Example:
-
-```tsx
-<ImageOptimizer
-  src="https://invalid-url.com/image.jpg"
-  fallbackSrc="fallback.jpg"
-  onError={(error) => console.error("Image failed to load:", error)}
-/>
-```
-
-## Development
-
-1. Clone the repository
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Start the development server:
-   ```bash
-   npm run dev
-   ```
-4. Run tests:
-   ```bash
-   npm test
-   ```
-5. Generate coverage report:
-   ```bash
-   npm run test:coverage
-   ```
-
-## Testing
-
-The component includes comprehensive tests using Jest and React Testing Library. Key test cases include:
-
-- Loading states
-- Error handling
-- Aspect ratio changes
-- Fallback image behavior
-- Event handling
-
-Run the test suite:
-
-```bash
-npm test
-```
+- React 18.2.0 or higher
+- Next.js 14.0.0 or higher (for server component support)
+- TypeScript 4.9.0 or higher (recommended)
 
 ## License
 
