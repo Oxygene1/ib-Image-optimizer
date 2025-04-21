@@ -43,13 +43,6 @@ function App() {
 }
 ```
 
-### React-Specific Import
-
-If you're using React and want to import directly from the React implementation:
-
-```tsx
-import { ImageOptimizer } from "ib-image-optimizer/use-react";
-```
 
 ## Props
 

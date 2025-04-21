@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { ImageOptimizer } from "../src/use-react";
+import { ImageOptimizer } from "../src";
 import "./styles.css";
 
 const App = () => {
