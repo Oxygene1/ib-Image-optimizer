@@ -1,15 +1,134 @@
 "use client";
-
-import { ClientImageOptimizer, type ImageOptimizerProps } from "./client";
+import { useEffect, useState, useRef } from "react";
+import {
+  createImageOptimizer,
+  type ImageOptimizerState,
+} from "../core/image-optimizer";
 import { Image, type ImageProps } from "../components/ui/image";
 import { Skeleton } from "../components/ui/skeleton";
+import { cn } from "../lib/utils";
 
-// Export the client component directly
-export const ImageOptimizer = ClientImageOptimizer;
+export interface ImageOptimizerProps
+  extends Omit<ImageProps, "src" | "onError"> {
+  src?: string;
+  fallbackSrc?: string;
+  onError?: (error: Error | ErrorEvent) => void;
+  onLoad?: () => void;
+  className?: string;
+  style?: React.CSSProperties;
+  showSkeleton?: boolean;
+}
 
-// Export types
-export type { ImageOptimizerProps, ImageProps };
-export { Image, Skeleton };
+export const ImageOptimizer = ({
+  src,
+  fallbackSrc,
+  onError,
+  onLoad,
+  className,
+  style,
+  showSkeleton = true,
+  aspectRatio = "auto",
+  ...props
+}: ImageOptimizerProps) => {
+  const [state, setState] = useState<ImageOptimizerState>({
+    currentSrc: src || "",
+    isLoading: Boolean(src),
+    hasError: false,
+  });
 
-// Default export
+  const optimizerRef = useRef<ReturnType<typeof createImageOptimizer> | null>(
+    null
+  );
+
+  useEffect(() => {
+    // Check if src is missing and trigger error if needed
+    if (!src) {
+      if (onError) onError(new Error("Missing src prop"));
+      setState((prev) => ({ ...prev, hasError: true, isLoading: false }));
+      return;
+    }
+
+    if (!optimizerRef.current) {
+      optimizerRef.current = createImageOptimizer({
+        src,
+        fallbackSrc,
+        onError,
+        onLoad,
+        aspectRatio,
+      });
+
+      const unsubscribe = optimizerRef.current.subscribe(setState);
+      return unsubscribe;
+    } else {
+      // Update the optimizer options if it already exists
+      optimizerRef.current.updateOptions({
+        src,
+        fallbackSrc,
+        onError,
+        onLoad,
+        aspectRatio,
+      });
+    }
+  }, [src, fallbackSrc, onError, onLoad, aspectRatio]);
+
+  const { currentSrc, isLoading, hasError } = state;
+
+  if (hasError && !fallbackSrc) {
+    return null;
+  }
+
+  return (
+    <div
+      className={cn(
+        "relative",
+        aspectRatio && typeof aspectRatio === "string"
+          ? `aspect-${aspectRatio}`
+          : "",
+        className
+      )}
+      style={style}
+      data-testid="image-optimizer-container"
+    >
+      {showSkeleton && isLoading && (
+        <Skeleton
+          data-testid="skeleton"
+          aspectRatio={aspectRatio}
+          className="absolute inset-0"
+        />
+      )}
+      <Image
+        src={currentSrc}
+        style={{ opacity: isLoading ? 0 : 1 }} // Use inline style for testing
+        className="transition-opacity duration-300"
+        onError={() => {
+          if (optimizerRef.current) {
+            optimizerRef.current.handleError();
+          } else if (onError) {
+            onError(new Error("Image failed to load"));
+          }
+          if (fallbackSrc) {
+            setState((prev) => ({
+              ...prev,
+              currentSrc: fallbackSrc,
+              isLoading: false,
+              hasError: true,
+            }));
+          }
+        }}
+        onLoad={() => {
+          if (optimizerRef.current) {
+            optimizerRef.current.handleLoad();
+          } else if (onLoad) {
+            onLoad();
+          }
+          setState((prev) => ({ ...prev, isLoading: false }));
+        }}
+        aspectRatio={aspectRatio}
+        {...props}
+      />
+    </div>
+  );
+};
+
+export { Image, type ImageProps };
 export default ImageOptimizer;
