@@ -4,7 +4,6 @@ import { resolve } from "path";
 import dts from "vite-plugin-dts";
 import { rmSync } from "fs";
 
-// Clean dist directory before build
 rmSync("dist", { recursive: true, force: true });
 
 export default defineConfig({
@@ -32,11 +31,12 @@ export default defineConfig({
         `${entryName}.${format === "es" ? "mjs" : "js"}`,
     },
     rollupOptions: {
-      external: ["react", "react-dom"],
+      external: ["react", "react-dom", "vue"],
       output: {
         globals: {
           react: "React",
           "react-dom": "ReactDOM",
+          vue: "Vue",
         },
       },
     },

@@ -1,31 +1,23 @@
 {
   "name": "ib-image-optimizer",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "A React component for optimizing images with loading states and aspect ratio control",
-  "type": "module",
-  "main": "./dist/index.js",
+ "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
     },
     "./use-react": {
-      "types": "./dist/use-react.d.ts",
       "import": "./dist/use-react.mjs",
-      "require": "./dist/use-react.js"
-    },
-    "./use-react/*": {
-      "types": "./dist/use-react/*.d.ts",
-      "import": "./dist/use-react/*.mjs",
-      "require": "./dist/use-react/*.js"
+      "require": "./dist/use-react.js",
+      "types": "./dist/use-react.d.ts"
     }
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
