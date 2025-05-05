@@ -38,11 +38,17 @@ export default defineConfig({
           "react-dom": "ReactDOM",
           vue: "Vue",
         },
+        // Preserve modules to better support tree-shaking and SSR
+        preserveModules: true,
+        // Ensure proper external handling
+        manualChunks: undefined,
       },
     },
     target: "esnext",
     sourcemap: true,
     outDir: "dist",
+    // Ensure proper SSR compatibility
+    ssr: true,
   },
   resolve: {
     extensions: [".tsx", ".ts", ".js", ".jsx", ".d.ts"],
