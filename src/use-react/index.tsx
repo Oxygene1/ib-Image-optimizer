@@ -1,12 +1,15 @@
+"use client";
+
 import { ClientImageOptimizer, type ImageOptimizerProps } from "./client";
 import { Image, type ImageProps } from "../components/ui/image";
+import { Skeleton } from "../components/ui/skeleton";
 
-// ImageOptimizer is imported to this file so that it can work with nextjs and other client and ssr react frameworks
+// Export the client component directly
 export const ImageOptimizer = ClientImageOptimizer;
 
 // Export types
 export type { ImageOptimizerProps, ImageProps };
-export { Image };
+export { Image, Skeleton };
 
 // Default export
 export default ImageOptimizer;

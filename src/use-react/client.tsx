@@ -1,6 +1,6 @@
 "use client";
-
-import { useEffect, useState, useRef, Suspense } from "react";
+import * as React from "react"
+import  { useEffect, useState, useRef } from "react";
 import {
   createImageOptimizer,
   type ImageOptimizerState,
@@ -20,17 +20,7 @@ export interface ImageOptimizerProps
   showSkeleton?: boolean;
 }
 
-const LoadingFallback = ({
-  aspectRatio = "auto",
-}: {
-  aspectRatio?: "auto" | "square" | "portrait" | "landscape";
-}) => (
-  <div className={cn("relative", aspectRatio && `aspect-${aspectRatio}`)}>
-    <Skeleton aspectRatio={aspectRatio} className="absolute inset-0" />
-  </div>
-);
-
-export const ClientImageOptimizer = ({
+export function ClientImageOptimizer({
   src,
   fallbackSrc,
   onError,
@@ -40,7 +30,7 @@ export const ClientImageOptimizer = ({
   showSkeleton = true,
   aspectRatio = "auto",
   ...props
-}: ImageOptimizerProps) => {
+}: ImageOptimizerProps) {
   const [state, setState] = useState<ImageOptimizerState>({
     currentSrc: src || "",
     isLoading: Boolean(src),
@@ -87,56 +77,48 @@ export const ClientImageOptimizer = ({
   }
 
   return (
-    <Suspense fallback={<LoadingFallback aspectRatio={aspectRatio} />}>
-      <div
-        className={cn(
-          "relative",
-          aspectRatio && typeof aspectRatio === "string"
-            ? `aspect-${aspectRatio}`
-            : "",
-          className
-        )}
-        style={style}
-        data-testid="image-optimizer-container"
-      >
-        {showSkeleton && isLoading && (
-          <Skeleton
-            data-testid="skeleton"
-            aspectRatio={aspectRatio}
-            className="absolute inset-0"
-          />
-        )}
-        <Image
-          src={currentSrc}
-          style={{ opacity: isLoading ? 0 : 1 }}
-          className="transition-opacity duration-300"
-          onError={() => {
-            if (optimizerRef.current) {
-              optimizerRef.current.handleError();
-            } else if (onError) {
-              onError(new Error("Image failed to load"));
-            }
-            if (fallbackSrc) {
-              setState((prev) => ({
-                ...prev,
-                currentSrc: fallbackSrc,
-                isLoading: false,
-                hasError: true,
-              }));
-            }
-          }}
-          onLoad={() => {
-            if (optimizerRef.current) {
-              optimizerRef.current.handleLoad();
-            } else if (onLoad) {
-              onLoad();
-            }
-            setState((prev) => ({ ...prev, isLoading: false }));
-          }}
+    <div
+      className={cn(
+        "relative",
+        aspectRatio && typeof aspectRatio === "string"
+          ? `aspect-${aspectRatio}`
+          : "",
+        className
+      )}
+      style={style}
+      data-testid="image-optimizer-container"
+    >
+      {showSkeleton && isLoading && (
+        <Skeleton
+          data-testid="skeleton"
           aspectRatio={aspectRatio}
-          {...props}
+          className="absolute inset-0"
         />
-      </div>
-    </Suspense>
+      )}
+      <Image
+        src={currentSrc || "/placeholder.svg"}
+        style={{
+          opacity: isLoading ? 0 : 1,
+          transition: "opacity 300ms ease",
+        }}
+        onError={(e) => {
+          if (optimizerRef.current) {
+            optimizerRef.current.handleError();
+          } else if (onError || e === undefined) {
+            throw console.error("Error image value is undefined");
+          }
+        }}
+        onLoad={() => {
+          if (optimizerRef.current) {
+            optimizerRef.current.handleLoad();
+          } else if (onLoad) {
+            onLoad();
+          }
+          setState((prev) => ({ ...prev, isLoading: false }));
+        }}
+        aspectRatio={aspectRatio}
+        {...props}
+      />
+    </div>
   );
-};
+}
