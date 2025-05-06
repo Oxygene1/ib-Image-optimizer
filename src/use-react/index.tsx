@@ -4,7 +4,6 @@ import { Skeleton } from "../components/ui/skeleton";
 import { cn } from "../lib/utils";
 import {  ImageOptimizerProps } from "@/types";
 import * as React from "react";
-import { CustomFeature } from "@/modules";
 
 export const ImageOptimizer = ({
   src,
@@ -32,7 +31,7 @@ export const ImageOptimizer = ({
     // Check if src is missing and trigger error if needed
     if (!src) {
       if (onError) onError(new Error("Missing src prop"));
-      setState((prev) => ({ ...prev, hasError: true, isLoading: false }));
+      setState((prev:ImageOptimizerState) => ({ ...prev, hasError: true, isLoading: false }));
       return;
     }
 
@@ -95,7 +94,7 @@ export const ImageOptimizer = ({
             onError(new Error("Image failed to load"));
           }
           if (fallbackSrc) {
-            setState((prev) => ({
+            setState((prev:ImageOptimizerState) => ({
               ...prev,
               currentSrc: fallbackSrc,
               isLoading: false,
@@ -109,7 +108,7 @@ export const ImageOptimizer = ({
           } else if (onLoad) {
             onLoad();
           }
-          setState((prev) => ({ ...prev, isLoading: false }));
+          setState((prev:ImageOptimizerState) => ({ ...prev, isLoading: false }));
         }}
         aspectRatio={aspectRatio}
         {...props}

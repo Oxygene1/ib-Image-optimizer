@@ -1,4 +1,4 @@
-export declare namespace CustomFeature {
+ declare namespace CustomFeature {
   function makeEffect(effect: EffectCallback, deps?: DependencyList): void;
   function updateState<S>(
     initialState: S | (() => S)
