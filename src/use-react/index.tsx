@@ -4,6 +4,7 @@ import { Skeleton } from "../components/ui/skeleton";
 import { cn } from "../lib/utils";
 import {  ImageOptimizerProps } from "@/types";
 import * as React from "react";
+// import { CustomFeature } from "@/modules";
 
 export const ImageOptimizer = ({
   src,
