@@ -1,9 +1,8 @@
-import ImageOptimizer from "@/use-react";
+import { ImageOptimizer } from "@/use-react";
 import "@testing-library/jest-dom";
 import { render, screen, fireEvent } from "@testing-library/react";
 
 import { beforeEach, describe, expect, it, vi } from "vitest";
-
 
 global.Image = class MockImage implements Partial<HTMLImageElement> {
   onload: () => void = () => {};

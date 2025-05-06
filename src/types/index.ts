@@ -1,3 +1,5 @@
+import { DependencyList, EffectCallback } from "react";
+
 export interface ImageProps
   extends Omit<React.ImgHTMLAttributes<HTMLImageElement>, "width" | "height"> {
   aspectRatio?: "square" | "portrait" | "landscape" | "auto";
@@ -25,3 +27,4 @@ export interface ImageOptimizerProps
   style?: React.CSSProperties;
   showSkeleton?: boolean;
 }
+
