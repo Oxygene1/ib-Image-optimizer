@@ -1,7 +1,9 @@
+"use client";
 import * as React from "react";
 import { cn } from "../../lib/utils";
 
-export interface ImageProps extends Omit<React.ImgHTMLAttributes<HTMLImageElement>, "width" | "height"> {
+export interface ImageProps
+  extends Omit<React.ImgHTMLAttributes<HTMLImageElement>, "width" | "height"> {
   aspectRatio?: "square" | "portrait" | "landscape" | "auto";
   width?: number;
   height?: number;
@@ -14,6 +16,7 @@ export interface ImageProps extends Omit<React.ImgHTMLAttributes<HTMLImageElemen
   blurDataURL?: string;
   sizes?: string;
   unoptimized?: boolean;
+  fill: boolean;
 }
 
 // Standard HTML Image component
@@ -59,12 +62,14 @@ const StandardImage = React.forwardRef<HTMLImageElement, ImageProps>(
 StandardImage.displayName = "StandardImage";
 
 // Determine which Image component to use
-let Image: React.ForwardRefExoticComponent<ImageProps & React.RefAttributes<HTMLImageElement>>;
+let Image: React.ForwardRefExoticComponent<
+  ImageProps & React.RefAttributes<HTMLImageElement>
+>;
 
 // Try to use Next.js Image if available
 try {
   const NextImage = require("next/image").default;
-  
+
   // Next.js Image wrapper
   Image = React.forwardRef<HTMLImageElement, ImageProps>(
     (
@@ -85,6 +90,7 @@ try {
         sizes,
         unoptimized,
         style,
+        fill,
         ...props
       },
       ref
