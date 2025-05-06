@@ -12,7 +12,7 @@ export interface ImageProps
   blurDataURL?: string;
   sizes?: string;
   unoptimized?: boolean;
-  fill: boolean;
+  fill?: boolean;
 }
 
 export interface ImageOptimizerProps

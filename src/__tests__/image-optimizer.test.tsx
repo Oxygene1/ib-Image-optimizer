@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from "@testing-library/react";
 
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import ImageOptimizer from "../use-react";
+import { ImageOptimizer } from "../use-react";
 
 global.Image = class MockImage implements Partial<HTMLImageElement> {
   onload: () => void = () => {};
