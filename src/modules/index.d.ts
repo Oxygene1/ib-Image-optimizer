@@ -1,3 +1,5 @@
+import { DependencyList, Dispatch, EffectCallback, MutableRefObject, SetStateAction } from "react";
+
  declare namespace CustomFeature {
   function makeEffect(effect: EffectCallback, deps?: DependencyList): void;
   function updateState<S>(
