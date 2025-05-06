@@ -1,6 +1,6 @@
 {
   "name": "ib-image-optimizer",
-  "version": "1.9.1",
+  "version": "1.9.3",
   "description": "A React component for optimizing images with loading states and aspect ratio control",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

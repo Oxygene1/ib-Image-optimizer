@@ -2,8 +2,6 @@ import * as React from "react";
 import { cn } from "../../lib/utils";
 import { ImageProps } from "@/types";
 
-
-
 // Standard HTML Image component
 const StandardImage = React.forwardRef<HTMLImageElement, ImageProps>(
   (
@@ -31,8 +29,8 @@ const StandardImage = React.forwardRef<HTMLImageElement, ImageProps>(
     return (
       <img
         ref={ref}
-        className={cn("rounded-lg", aspectRatioClass[aspectRatio], className)}
-        src={src || "/placeholder.svg"}
+        className={cn(aspectRatioClass[aspectRatio], className)}
+        src={src}
         width={width}
         height={height}
         loading={loading}
@@ -75,7 +73,7 @@ try {
         sizes,
         unoptimized,
         style,
-        fill,
+        fill = false,
         ...props
       },
       ref
@@ -92,8 +90,8 @@ try {
           ref={ref as any}
           className={cn("rounded-lg", aspectRatioClass[aspectRatio], className)}
           src={src || ""}
-          width={width || (height ? undefined : 1920)}
-          height={height || (width ? undefined : 1080)}
+          width={width}
+          height={height}
           priority={priority || loading === "eager"}
           quality={quality}
           placeholder={placeholder}

@@ -1,14 +1,10 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
-import {
-  createImageOptimizer,
-  type ImageOptimizerState,
-} from "../core/image-optimizer";
+import { createImageOptimizer, type ImageOptimizerState } from "../core";
 import { Image } from "../components/ui/image";
 import { Skeleton } from "../components/ui/skeleton";
 import { cn } from "../lib/utils";
 import { ImageOptimizerProps } from "@/types";
-
 
 export const ClientImageOptimizer = ({
   src,
