@@ -1,3 +1,3 @@
 export * from "./core/image-optimizer";
-export { ImageOptimizer, type ImageOptimizerProps } from "./use-react";
-export { Image, type ImageProps } from "./components/ui/image";
+export { ImageOptimizer } from "./use-react";
+export { type ImageProps, type ImageOptimizerProps } from "./types";

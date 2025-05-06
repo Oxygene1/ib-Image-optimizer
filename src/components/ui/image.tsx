@@ -1,22 +1,8 @@
 import * as React from "react";
 import { cn } from "../../lib/utils";
+import { ImageProps } from "@/types";
 
-export interface ImageProps
-  extends Omit<React.ImgHTMLAttributes<HTMLImageElement>, "width" | "height"> {
-  aspectRatio?: "square" | "portrait" | "landscape" | "auto";
-  width?: number;
-  height?: number;
-  loading?: "eager" | "lazy";
-  fit?: "contain" | "cover" | "fill" | "none" | "scale-down";
-  // Next.js specific props
-  priority?: boolean;
-  quality?: number;
-  placeholder?: string | "blur" | "empty";
-  blurDataURL?: string;
-  sizes?: string;
-  unoptimized?: boolean;
-  fill: boolean;
-}
+
 
 // Standard HTML Image component
 const StandardImage = React.forwardRef<HTMLImageElement, ImageProps>(

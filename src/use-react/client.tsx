@@ -3,11 +3,10 @@ import {
   createImageOptimizer,
   type ImageOptimizerState,
 } from "../core/image-optimizer";
-import { Image, type ImageProps } from "../components/ui/image";
+import { Image } from "../components/ui/image";
 import { Skeleton } from "../components/ui/skeleton";
 import { cn } from "../lib/utils";
-import { ImageOptimizerProps } from ".";
-
+import { ImageOptimizerProps } from "@/types";
 
 
 export const ClientImageOptimizer = ({
@@ -121,5 +120,5 @@ export const ClientImageOptimizer = ({
   );
 };
 
-export { Image, type ImageProps };
+export { Image };
 export default ClientImageOptimizer;
