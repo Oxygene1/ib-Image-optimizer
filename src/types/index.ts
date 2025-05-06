@@ -1,10 +1,3 @@
-import {
-  DependencyList,
-  Dispatch,
-  EffectCallback,
-  MutableRefObject,
-  SetStateAction,
-} from "react";
 
 export interface ImageProps
   extends Omit<React.ImgHTMLAttributes<HTMLImageElement>, "width" | "height"> {
@@ -34,10 +27,4 @@ export interface ImageOptimizerProps
   showSkeleton?: boolean;
 }
 
-export declare namespace CustomFeature {
-  function makeEffect(effect: EffectCallback, deps?: DependencyList): void;
-  function updateState<S>(
-    initialState: S | (() => S)
-  ): [S, Dispatch<SetStateAction<S>>];
-  function makeRef<T>(initialValue: T): MutableRefObject<T>;
-}
+

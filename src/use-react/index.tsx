@@ -2,8 +2,9 @@ import { createImageOptimizer, type ImageOptimizerState } from "../core";
 import { Image } from "../components/ui/image";
 import { Skeleton } from "../components/ui/skeleton";
 import { cn } from "../lib/utils";
-import { CustomFeature, ImageOptimizerProps } from "@/types";
+import {  ImageOptimizerProps } from "@/types";
 import * as React from "react";
+import { CustomFeature } from "@/modules";
 
 export const ImageOptimizer = ({
   src,
