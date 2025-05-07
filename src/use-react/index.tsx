@@ -4,6 +4,7 @@ import { Skeleton } from "../components/ui/skeleton";
 import { cn } from "../lib/utils";
 import {  ImageOptimizerProps } from "@/types";
 import * as React from "react";
+import { makeEffect, makeRef, updateState } from "@/utils/custom-hooks";
 // import { CustomFeature } from "@/modules";
 
 export const ImageOptimizer = ({
@@ -17,18 +18,19 @@ export const ImageOptimizer = ({
   aspectRatio = "auto",
   ...props
 }: ImageOptimizerProps) => {
-  const [state, setState] = CustomFeature.updateState<ImageOptimizerState>({
+  const [state, setState] = updateState<ImageOptimizerState>({
     currentSrc: src || "",
     isLoading: Boolean(src),
     hasError: false,
   });
 
-  const optimizerRef = CustomFeature.makeRef<ReturnType<typeof createImageOptimizer> | null>(
+  const optimizerRef = makeRef<ReturnType<typeof createImageOptimizer> | null>(
     null
   );
 
   
-  CustomFeature.makeEffect(() => {
+ makeEffect(() => {
+
     // Check if src is missing and trigger error if needed
     if (!src) {
       if (onError) onError(new Error("Missing src prop"));

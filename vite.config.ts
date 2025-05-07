@@ -10,7 +10,7 @@ export default defineConfig({
   plugins: [
     react(),
     dts({
-      include: ["src/**/*.ts", "src/**/*.tsx", "src/**/*.d.ts"],
+      include: ["src/**/*.ts", "src/**/*.tsx", "src/**/*.d.ts", "src/types/*.d.ts"],
       exclude: ["src/__tests__", "src/**/*.test.ts", "src/**/*.test.tsx"],
       insertTypesEntry: true,
       rollupTypes: true,
