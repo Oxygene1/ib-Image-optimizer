@@ -1,32 +1,42 @@
 {
   "name": "ib-image-optimizer",
-  "version": "1.9.9",
+  "version": "2.0.1",
   "description": "A React component for optimizing images with loading states and aspect ratio control",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "exports": {
-    ".": {
-      "import": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.mjs"
-      },
-      "require": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
-      }
+  ".": {
+    "import": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.mjs"
     },
-    "./use-react": {
-      "import": {
-        "types": "./dist/use-react.d.ts",
-        "default": "./dist/use-react.mjs"
-      },
-      "require": {
-        "types": "./dist/use-react.d.ts",
-        "default": "./dist/use-react.js"
-      }
+    "require": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
     }
   },
+  "./use-react": {
+    "import": {
+      "types": "./dist/use-react.d.ts",
+      "default": "./dist/use-react.mjs"
+    },
+    "require": {
+      "types": "./dist/use-react.d.ts",
+      "default": "./dist/use-react.js"
+    }
+  },
+  "./next": {
+    "import": {
+      "types": "./dist/next/index.d.ts",
+      "default": "./dist/next/index.mjs"
+    },
+    "require": {
+      "types": "./dist/next/index.d.ts",
+      "default": "./dist/next/index.js"
+    }
+  }
+},
   "sideEffects": false,
   "files": [
     "dist"
@@ -55,6 +65,11 @@
   "peerDependencies": {
     "react": ">=18.2.0",
     "react-dom": ">=18.2.0"
+  },
+  "peerDependenciesMeta": {
+    "next": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.6.3",
@@ -85,8 +100,8 @@
   },
   "dependencies": {
     "clsx": "^2.1.1",
+    "next": "^15.3.2",
     "tailwind-merge": "^2.6.0",
-    "vite-plugin-dts": "^4.5.3",
-    "next": "^14.0.0"
+    "vite-plugin-dts": "^4.5.3"
   }
 }
